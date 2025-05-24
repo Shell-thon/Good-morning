@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <title>Günaydın Aşkım</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Dancing Script', cursive;
+      background: #fff8f0;
+      color: #4b2e1e;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    .floating-emojis {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .floating-emoji {
+      position: absolute;
+      font-size: 2rem;
+      animation: floatUp linear infinite;
+      opacity: 0.5;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) scale(1);
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+
+      100% {
+        transform: translateY(-10vh) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5em;
+    }
+
+    h2 {
+      color: #a97457;
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin: 1em auto;
+      max-width: 90%;
+    }
+
+    .btn {
+      background: #a97457;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1em;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #8b5e45;
+    }
+
+    .section {
+      margin-top: 1em;
+      padding: 1em;
+      background: #fff2e2;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: left;
+      display: inline-block;
+    }
+
+    li {
+      font-size: 1.1rem;
+      margin: 0.5em 0;
+    }
+
+    .audio-player {
+      background: linear-gradient(135deg, #fff2e2, #f5e6d3);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      margin-top: 1em;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 2px solid #a97457;
+    }
+
+    .audio-info {
+      margin-bottom: 15px;
+    }
+
+    .audio-info h3 {
+      color: #4b2e1e;
+      margin: 10px 0 5px 0;
+      font-size: 1.3rem;
+    }
+
+    .audio-info p {
+      color: #a97457;
+      margin: 5px 0;
+      font-size: 1rem;
+    }
+
+    .audio-player audio {
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .audio-player audio::-webkit-media-controls-panel {
+      background-color: #a97457;
+    }
+
+    .music-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    #countdown {
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: #d14c4c;
+    }
+
+    #affirmationText {
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
+      min-height: 3em;
+      display: inline-block;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.5s ease;
+    }
+
+    .modal-content {
+      background: #fff8f0;
+      padding: 30px 40px;
+      border-radius: 15px;
+      text-align: center;
+      color: #4b2e1e;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      transform: scale(0.7);
+      transition: transform 0.5s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      color: #a97457;
+    }
+
+    .modal-content p {
+      font-size: 1.3rem;
+    }
+
+    .modal-btn {
+      background: #a97457;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      font-family: 'Dancing Script', cursive;
+      cursor: pointer;
+      margin-top: 1.5em;
+      transition: background 0.3s ease;
+    }
+
+    .modal-btn:hover {
+      background: #8b5e45;
+    }
+
+    .page-container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      position: relative;
+      z-index: 2;
+    }
+
+    .page {
+      min-width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    /* Navigation arrows - desktop only */
+    .nav-arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      color: #a97457;
+      cursor: pointer;
+      z-index: 10;
+      display: none;
+      /* Hidden by default */
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .nav-arrow:hover {
+      opacity: 1;
+    }
+
+    .arrow-left {
+      left: 20px;
+    }
+
+    .arrow-right {
+      right: 20px;
+    }
+
+    /* GIF container styling */
+    .gif-container {
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .gif-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 15px;
+      max-height: 400px;
+      object-fit: cover;
+    }
+
+    .gif-container iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+      display: block;
+    }
+
+    .giphy-credit {
+      font-size: 0.9rem;
+      color: #a97457;
+      margin-top: 10px;
+    }
+
+    .giphy-credit a {
+      color: #a97457;
+      text-decoration: none;
+    }
+
+    .giphy-credit a:hover {
+      text-decoration: underline;
+    }
+
+    @media (min-width: 769px) {
+      .nav-arrow {
+        display: block;
+        /* Show only on desktop */
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.2rem;
+      }
+
+      .btn,
+      .modal-btn {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+      }
+
+      .section {
+        padding: 0.8em;
+      }
+
+      .modal-content {
+        padding: 20px;
+        width: 85%;
+      }
+
+      .modal-content p {
+        font-size: 1.1rem;
+      }
+
+      .gif-container {
+        max-width: 300px;
+      }
+
+      .gif-container iframe {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="modal-overlay" id="introModal">
+    <div class="modal-content">
+      <h2>Selam Aşkım! 💖</h2>
+      <p>Sana özel bir sürprizim var...<br>Hazır mısın?</p>
+      <button class="modal-btn" id="enterButton">Keşfetmeye Başla ✨</button>
+    </div>
+  </div>
+
+  <!-- Navigation arrows (desktop only) -->
+  <div class="nav-arrow arrow-left" id="prevArrow">❮</div>
+  <div class="nav-arrow arrow-right" id="nextArrow">❯</div>
+
+  <div class="floating-emojis">
+    <span class="floating-emoji" style="left: 10%; animation-duration: 12s; animation-delay: 0s;">💛</span>
+    <span class="floating-emoji" style="left: 25%; animation-duration: 14s; animation-delay: 2s;">🌟</span>
+    <span class="floating-emoji" style="left: 40%; animation-duration: 10s; animation-delay: 4s;">💌</span>
+    <span class="floating-emoji" style="left: 55%; animation-duration: 16s; animation-delay: 1s;">😄</span>
+    <span class="floating-emoji" style="left: 70%; animation-duration: 11s; animation-delay: 3s;">🌿</span>
+    <span class="floating-emoji" style="left: 85%; animation-duration: 13s; animation-delay: 5s;">💕</span>
+  </div>
+
+  <div class="page-container" id="pageContainer">
+    <div class="page">
+      <h1>Günaydın Canım Mira 💛</h1>
+      <p>Sen benim güneşimsin. Her sabah uyandığımda sana sahip olduğum için şükrediyorum. Bugün güzel kalbine nazik
+        davransın.</p>
+    </div>
+
+    <div class="page">
+      <div class="section">
+        <h2>Senin Şarkın Çalıyor 🎶</h2>
+        <p>Bu şarkı her çaldığında aklıma sen geliyorsun:</p>
+        <div class="audio-player">
+          <div class="audio-info">
+            <div class="music-icon">🎵</div>
+            <h3>Alone With You</h3>
+            <p>Senin için özel seçtiğim şarkı</p>
+          </div>
+          <audio controls preload="metadata" style="width: 100%; margin-top: 15px;">
+            <source src="music/Alone With You(MP3_320K).mp3" type="audio/mpeg">
+            Tarayıcınız audio elementini desteklemiyor.
+          </audio>
+        </div>
+        <p style="font-size:0.8em; margin-top:10px;">(Eğer bir şarkı belirtmediysem, bu benim sana armağanım olsun diye
+          seçtiğim bir sürpriz!)</p>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="section">
+        <h2>Bugünkü Olumlaman 🌟</h2>
+        <p id="affirmationText"></p>
+        <button class="btn" onclick="newAffirmation()">Yeni Olumlama</button>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="section">
+        <h2>Mini Bir Aşk Mektubu 💌</h2>
+        <p>Sevgili Mira, kalbimin her atışı adını fısıldıyor. Ruhuma neşe, zihnime huzur getiriyorsun. Nazik, ışık dolu
+          ve ışıldayan sen olduğun için teşekkür ederim. Seninle hayatı paylaşmak için sonsuz minnettarım. 💛</p>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="section">
+        <h2>Bugünün Tatlı Hedefleri ✅</h2>
+        <ul>
+          <li><input type="checkbox" id="goal1" /> <label for="goal1">Bugün gülümse 😄</label></li>
+          <li><input type="checkbox" id="goal2" /> <label for="goal2">Bizi düşün 💑</label></li>
+          <li><input type="checkbox" id="goal3" /> <label for="goal3">Suyunu iç, güzellik 💧</label></li>
+          <li><input type="checkbox" id="goal4" /> <label for="goal4">Derin bir nefes al 🌿</label></li>
+          <li><input type="checkbox" id="goal5" /> <label for="goal5">Bana tatlı bir düşünce gönder 📩</label></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="section">
+        <h2>Yıldönümümüze Geri Sayım (8 Ağustos 🎉)</h2>
+        <p id="countdown"></p>
+        <p>O özel güne doğru sayarken her anın tadını çıkaralım! 💕</p>
+      </div>
+    </div>
+
+    <div class="page">
+      <h1>Sonsuz Sevgiyle... 🥰</h1>
+      <p>Umarım bu küçük sürpriz gününü biraz daha aydınlatmıştır. Seni çok seviyorum Mira!</p>
+      
+      <div class="gif-container">
+        <img src="img/img.gif" alt="Happy GIF" style="width: 100%; height: auto; border-radius: 15px;" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const introModal = document.getElementById('introModal');
+    const enterButton = document.getElementById('enterButton');
+    const bodyElement = document.body;
+    let isModalActive = true;
+
+    window.addEventListener('load', () => {
+      introModal.classList.add('active');
+      bodyElement.style.overflow = 'hidden';
+    });
+
+    enterButton.addEventListener('click', () => {
+      introModal.classList.remove('active');
+      setTimeout(() => {
+        introModal.style.display = 'none';
+        bodyElement.style.overflow = 'hidden';
+        isModalActive = false;
+      }, 500);
+    });
+
+    const pageContainer = document.getElementById('pageContainer');
+    const pages = document.querySelectorAll('.page');
+    const prevArrow = document.getElementById('prevArrow');
+    const nextArrow = document.getElementById('nextArrow');
+    let currentPageIndex = 0;
+    const totalPages = pages.length;
+
+    function showPage(index) {
+      if (index < 0) {
+        index = 0;
+      } else if (index >= totalPages) {
+        index = totalPages - 1;
+      }
+      pageContainer.style.transform = `translateX(-${index * 100}vw)`;
+      currentPageIndex = index;
+
+      // Update arrow visibility
+      prevArrow.style.display = currentPageIndex === 0 ? 'none' : 'block';
+      nextArrow.style.display = currentPageIndex === totalPages - 1 ? 'none' : 'block';
+    }
+
+    function nextPage() {
+      if (currentPageIndex < totalPages - 1) {
+        showPage(currentPageIndex + 1);
+      }
+    }
+
+    function prevPage() {
+      if (currentPageIndex > 0) {
+        showPage(currentPageIndex - 1);
+      }
+    }
+
+    // Add click event listeners for navigation arrows
+    prevArrow.addEventListener('click', prevPage);
+    nextArrow.addEventListener('click', nextPage);
+
+    // Keyboard navigation for desktop
+    document.addEventListener('keydown', function (event) {
+      if (isModalActive) return;
+      if (event.key === 'ArrowLeft') {
+        prevPage();
+      } else if (event.key === 'ArrowRight') {
+        nextPage();
+      }
+    });
+
+    // Improved touch/swipe handling
+    let touchstartX = 0;
+    let touchendX = 0;
+
+    pageContainer.addEventListener('touchstart', function (event) {
+      if (isModalActive) return;
+      touchstartX = event.changedTouches[0].screenX;
+    }, { passive: true });
+
+    pageContainer.addEventListener('touchend', function (event) {
+      if (isModalActive) return;
+      touchendX = event.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      if (touchendX > touchstartX + swipeThreshold) {
+        // Swipe right - go to previous page
+        prevPage();
+      } else if (touchendX < touchstartX - swipeThreshold) {
+        // Swipe left - go to next page
+        nextPage();
+      }
+    }
+
+    showPage(0);
+
+    const affirmations = [
+      "Sen kelimelerle tarif edilemeyecek kadar güzelsin.", "Her gün dünyamı aydınlatıyorsun.", "Güçlü, nazik ve çok seviliyorsun.",
+      "Sen bu dünyayı daha güzel kılıyorsun.", "Gülüşün en sevdiğim güneşim.", "Sen beni bütün hissettiriyorsun.",
+      "Her günümün en güzel parçasısın.", "Seninle hayat bir rüya gibi.", "Sen benim güvenli alanımsın.",
+      "Aşkın bana güç veriyor.", "Dünyanın tüm güzelliklerini hak ediyorsun.", "Her gün sana yeniden aşık oluyorum.",
+      "Kalbin altın gibi.", "Sen benim her şeyimsin.", "Kahkahan ruhumun melodisi.",
+      "Sen aşkı kolay ve gerçek hissettiriyorsun.", "Seninle gurur duyuyorum.", "Bana ilham veriyorsun.",
+      "Seni hep değer vererek seveceğim.", "Sen, aşka inanmamın sebebisin.", "Sonsuzca sana hayranım.",
+      "Sen sadece sevgilim değil, huzurumsun.", "Sen insana dönüşmüş büyüsün."
+    ];
+
+    function newAffirmation() {
+      const affirmationText = document.getElementById('affirmationText');
+      if (!affirmationText) return;
+      affirmationText.style.opacity = 0;
+      setTimeout(() => {
+        const random = Math.floor(Math.random() * affirmations.length);
+        affirmationText.innerText = affirmations[random];
+        affirmationText.style.opacity = 1;
+      }, 500);
+    }
+    if (document.getElementById('affirmationText')) {
+      newAffirmation();
+      setInterval(newAffirmation, 7000);
+    }
+
+    const targetDate = new Date("August 8, 2025 00:00:00").getTime();
+    const countdownElement = document.getElementById("countdown");
+    let countdownInterval;
+
+    function updateCountdown() {
+      if (!countdownElement) return;
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        countdownElement.innerHTML = "Mutlu Yıldönümleri Aşkım! 🎉💖<br>Nice senelere!";
+        if (countdownInterval) clearInterval(countdownInterval);
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownElement.innerText = `${days}g ${hours}s ${minutes}d ${seconds}s kaldı yıldönümümüze 💕`;
+    }
+
+    if (countdownElement) {
+      updateCountdown();
+      countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+  </script>
+
+</body>
+
+</html>
